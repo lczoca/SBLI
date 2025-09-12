@@ -1,0 +1,35 @@
+# =========================================================================
+#   Code with all the paths and file names to be read, load, or save.
+#   New CGNS files, figures and data can be found in the path below.
+# =========================================================================
+
+# =====================================
+#   Grid file
+# =====================================
+grid_path = '/media/lczoca/hd_leonardo2/Hugo_Data/'
+grid_name = 'grid_2D'
+grid_extension = '.cgns'
+
+# =====================================
+#   Solution files
+# =====================================
+qout_path = '/media/lczoca/hd_leonardo2/Hugo_Data/'
+qout_name = 'qout'
+qout_extension = '_2D.cgns'
+first_qout     = 6284
+last_qout      = 43809
+skip_step_qout = 5
+
+# =====================================
+#   Mean solution file
+# =====================================
+mean_path = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/'
+mean_name = 'mean_2D_' + str(first_qout) + '_' + str(last_qout) + '_' + str(skip_step_qout)
+mean_extenrion = '.cgns'
+
+# =====================================
+#   RMS solution file
+# =====================================
+rms_path = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/'
+rms_name = 'rms_2D_' + str(first_qout) + '_' + str(last_qout) + '_' + str(skip_step_qout)
+rms_extenrion = '.cgns'

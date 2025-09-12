@@ -1,0 +1,354 @@
+# ==============================================================================
+# PYTHON PROJECT .GITIGNORE
+# Comprehensive ignore patterns for Python projects with data analysis,
+# figure generation, and various file types that shouldn't be tracked
+# ==============================================================================
+
+# ------------------------------------------------------------------------------
+# Python Runtime Files
+# ------------------------------------------------------------------------------
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.py[oc]
+*$py.class
+
+# C extensions (from compiled Python modules)
+*.so
+
+# Distribution / packaging artifacts
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ------------------------------------------------------------------------------
+# Virtual Environments
+# ------------------------------------------------------------------------------
+
+# Virtual environment directories (common names)
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+.env/
+
+# Conda environments
+conda-meta/
+.conda/
+
+# ------------------------------------------------------------------------------
+# IDE and Editor Files
+# ------------------------------------------------------------------------------
+
+# PyCharm
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ------------------------------------------------------------------------------
+# Jupyter Notebooks
+# ------------------------------------------------------------------------------
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# IPython profile directories
+profile_default/
+ipython_config.py
+
+# Jupyter configuration
+.jupyter/
+
+# ------------------------------------------------------------------------------
+# Data Files (Raw, Processed, and Temporary)
+# ------------------------------------------------------------------------------
+
+# Common data file extensions
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.json
+*.xml
+*.h5
+*.hdf5
+*.hdf
+*.pkl
+*.pickle
+*.parquet
+*.feather
+*.arrow
+*.cgns
+*.mat
+*.npy
+*.npz
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Large data directories (customize based on your project structure)
+data/raw/
+data/processed/
+data/external/
+data/interim/
+datasets/
+raw_data/
+processed_data/
+cache/
+temp_data/
+
+# Specific data patterns
+*_data.*
+*_dataset.*
+*_cache.*
+temp_*
+
+# ------------------------------------------------------------------------------
+# Generated Figures and Images
+# ------------------------------------------------------------------------------
+
+# Image file extensions
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.tif
+*.svg
+*.eps
+*.pdf
+*.ps
+
+# Figure directories
+figures/
+plots/
+images/
+outputs/
+results/
+visualizations/
+
+# Matplotlib/Seaborn cache
+.matplotlib/
+.cache/matplotlib/
+
+# ------------------------------------------------------------------------------
+# Model Files and Machine Learning Artifacts
+# ------------------------------------------------------------------------------
+
+# Model files
+*.model
+*.pkl
+*.joblib
+*.sav
+*.h5
+*.pb
+*.onnx
+*.pt
+*.pth
+
+# Model directories
+models/
+trained_models/
+checkpoints/
+weights/
+
+# MLflow artifacts
+mlruns/
+.mlflow/
+
+# TensorBoard logs
+logs/
+tensorboard_logs/
+
+# ------------------------------------------------------------------------------
+# Configuration and Secret Files
+# ------------------------------------------------------------------------------
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+config.ini
+secrets.json
+credentials.json
+*.key
+*.pem
+
+# Configuration files that might contain sensitive data
+config/local/
+config/development/
+config/production/
+
+# ------------------------------------------------------------------------------
+# Temporary and Cache Files
+# ------------------------------------------------------------------------------
+
+# General temporary files
+*.tmp
+*.temp
+*~
+.DS_Store
+Thumbs.db
+
+# Python cache
+.cache/
+.pytest_cache/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# ------------------------------------------------------------------------------
+# Documentation Build Files
+# ------------------------------------------------------------------------------
+
+# Sphinx documentation
+docs/_build/
+docs/build/
+.readthedocs.yml
+
+# MkDocs
+site/
+
+# ------------------------------------------------------------------------------
+# System and OS Files
+# ------------------------------------------------------------------------------
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.nfs*
+
+# ------------------------------------------------------------------------------
+# Version Control and Backup Files
+# ------------------------------------------------------------------------------
+
+# Git
+.git/
+*.orig
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.save
+
+# ------------------------------------------------------------------------------
+# Package Manager Files
+# ------------------------------------------------------------------------------
+
+# pip
+pip-log.txt
+pip-delete-this-directory.txt
+
+# pipenv
+Pipfile.lock
+
+# Poetry
+poetry.lock
+
+# ------------------------------------------------------------------------------
+# Profiling and Debugging
+# ------------------------------------------------------------------------------
+
+# Profiler output
+*.prof
+*.lprof
+
+# Debugger
+.pdb
+
+# ------------------------------------------------------------------------------
+# Custom Project Patterns
+# ------------------------------------------------------------------------------
+# Add your specific patterns below:
+
+# Example: Ignore all files in a specific experiments directory
+# experiments/*/output/
+# experiments/*/temp/
+
+# Example: Ignore large datasets but keep small sample files
+# data/large_datasets/
+# !data/large_datasets/sample_*.csv
+
+# Example: Ignore all log files except important ones
+# *.log
+# !important.log
+
+# ------------------------------------------------------------------------------
+# Exceptions (Files to Track Despite Above Rules)
+# ------------------------------------------------------------------------------
+# Use ! to force tracking of files that would otherwise be ignored
+
+# Example: Keep empty directories with .gitkeep files
+!.gitkeep
+
+# Example: Keep sample data files for testing
+# !data/samples/
+# !**/sample_data.*
+
+# Example: Keep small configuration templates
+# !config/template_*.json
