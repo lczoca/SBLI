@@ -45,7 +45,7 @@ None
 
 **Usage Example:**
 ```python
-close_file(ifile)
+CGSN.close_file(ifile)
 ```
 
 ---
