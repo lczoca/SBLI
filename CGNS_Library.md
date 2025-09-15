@@ -157,7 +157,7 @@ Reads 2D coordinates (grid) with dimensions (nx, ny).
 
 **Usage Example:**
 ```python
-x = CGNS.read_2D_coord(var, ifile, ibase, izone, ijk_min, ijk_max, nx, ny)
+x = CGNS.read_2d_coord(var, ifile, ibase, izone, ijk_min, ijk_max, nx, ny)
 ```
 
 ---
@@ -183,7 +183,7 @@ Reads 3D coordinates (grid) with dimensions (nx, ny, nz).
 
 **Usage Example:**
 ```python
-x = CGNS.read_3D_coord(var, ifile, ibase, izone, ijk_min, ijk_max, nx, ny, nz)
+x = CGNS.read_3d_coord(var, ifile, ibase, izone, ijk_min, ijk_max, nx, ny, nz)
 ```
 
 ---
@@ -210,7 +210,7 @@ Reads a specified variable from a 2D flow solution file.
 
 **Usage Example:**
 ```python
-q = CGNS.read_2D_flow(var, ifile, ibase, izone, ijk_min, ijk_max, nx, ny)
+q = CGNS.read_2d_flow(var, ifile, ibase, izone, ijk_min, ijk_max, nx, ny)
 ```
 
 ---
@@ -236,7 +236,7 @@ Reads a specified variable from a 3D flow solution file.
 
 **Usage Example:**
 ```python
-q = CGNS.read_3D_flow(var, ifile, ibase, izone, ijk_min, ijk_max, nx, ny, nz)
+q = CGNS.read_3d_flow(var, ifile, ibase, izone, ijk_min, ijk_max, nx, ny, nz)
 ```
 
 ---
@@ -306,7 +306,7 @@ None
 
 **Usage Example:**
 ```python
-CGNS.write_2D_coord(CGNS_filename, zone_number, nx, ny, xcoord, ycoord)
+CGNS.write_2d_coord(CGNS_filename, zone_number, nx, ny, xcoord, ycoord)
 ```
 
 **Notes:**
@@ -335,7 +335,7 @@ None
 
 **Usage Example:**
 ```python
-CGNS.write_3D_coord(CGNS_filename, zone_number, nx, ny, nz, xcoord, ycoord, zcoord)
+CGNS.write_3d_coord(CGNS_filename, zone_number, nx, ny, nz, xcoord, ycoord, zcoord)
 ```
 
 **Notes:**
@@ -364,7 +364,7 @@ None
 
 **Usage Example:**
 ```python
-CGNS.write_soln_2D(CGNS_solnname, zone_number, nx, ny, solution, var_name)
+CGNS.write_soln_2d(CGNS_solnname, zone_number, nx, ny, solution, var_name)
 ```
 
 **Notes:**
@@ -393,7 +393,7 @@ None
 
 **Usage Example:**
 ```python
-CGNS.write_soln_3D(CGNS_solnname, zone_number, nx, ny, nz, solution, var_name)
+CGNS.write_soln_3d(CGNS_solnname, zone_number, nx, ny, nz, solution, var_name)
 ```
 
 **Notes:**
