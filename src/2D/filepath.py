@@ -24,6 +24,8 @@ skip_step_qout = 5
 #   Mean solution file
 # =====================================
 mean_path = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/'
+mean_path_CGNS = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/CGNS_data/'
+mean_path_python = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/Python_data/'
 mean_name = 'mean_2D_' + str(first_qout) + '_' + str(last_qout) + '_' + str(skip_step_qout)
 mean_extenrion = '.cgns'
 
@@ -31,5 +33,7 @@ mean_extenrion = '.cgns'
 #   RMS solution file
 # =====================================
 rms_path = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/'
+rms_path_CGNS = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/CGNS_data/'
+rms_path_python = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/Python_data/'
 rms_name = 'rms_2D_' + str(first_qout) + '_' + str(last_qout) + '_' + str(skip_step_qout)
 rms_extenrion = '.cgns'
