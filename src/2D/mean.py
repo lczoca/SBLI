@@ -216,8 +216,8 @@ with tqdm(total=nqout, desc="Processing qouts") as pbar:
         # Read and accumulate momentum components
         momentumx_h = CGNS.read_2d_flow('MomentumX', ifile, ibase, izone, ijk_min_h, ijk_max_h, nx_h, ny_h)
         momentumy_h = CGNS.read_2d_flow('MomentumY', ifile, ibase, izone, ijk_min_h, ijk_max_h, nx_h, ny_h)
-        mean_momentumx_h = momentumx_h  # Note: This should probably be += like the others
-        mean_momentumy_h = momentumy_h  # Note: This should probably be += like the others
+        mean_momentumx_h += momentumx_h
+        mean_momentumy_h += momentumy_h
 
         # Calculate and accumulate velocity components: v = momentum/density
         mean_velocityx_h[:,:] += momentumx_h / density_h
