@@ -37,3 +37,16 @@ rms_path_CGNS = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/CGNS_data/'
 rms_path_python = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/Python_data/'
 rms_name = 'rms_2D_' + str(first_qout) + '_' + str(last_qout) + '_' + str(skip_step_qout)
 rms_extenrion = '.cgns'
+
+# =====================================
+#   Flow solution file
+# =====================================
+flow_path = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/'
+flow_path_python = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/Python_data/'
+# flow_name = 'flow_2D_' + str(first_qout) + '_' + str(last_qout) + '_' + str(skip_step_qout)
+# flow_extenrion = '.cgns'
+
+# =====================================
+#   Figures path
+# =====================================
+figure_path = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/Figure/'
