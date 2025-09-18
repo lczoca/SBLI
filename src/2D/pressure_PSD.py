@@ -28,10 +28,6 @@ pressure_setup_start = time.time()
 pressure_file = flow_path_python + 'pressure_o.npy'
 P = np.load(pressure_file)
 
-# Load mean pressure from Python/Numpy file
-mean_pressure_file = flow_path_python + 'mean_pressure_o.npy'
-P_mean = np.load(pressure_file)
-
 pressure_setup_time = time.time() - pressure_setup_start
 print(f"    Pressure loading completed in {pressure_setup_time:.2f} seconds")
 
@@ -83,15 +79,10 @@ P_mean_probes = np.zeros((nqout, num_probes))
 
 
 # Load pressure probes in points in the suction side
-P_probes[:,0] = P[312,0,:] #- P_mean[312,0]
-P_probes[:,1] = P[359,0,:] #- P_mean[359,0]
-P_probes[:,2] = P[387,0,:] #- P_mean[387,0]
-P_probes[:,3] = P[416,199,:] #- P_mean[416,199]
-
-P_mean_probes[:,0] = P_mean[312,0]
-P_mean_probes[:,1] = P_mean[359,0]
-P_mean_probes[:,2] = P_mean[387,0]
-P_mean_probes[:,3] = P_mean[416,199]
+P_probes[:,0] = P[312,0,:]
+P_probes[:,1] = P[359,0,:]
+P_probes[:,2] = P[387,0,:]
+P_probes[:,3] = P[416,199,:]
 
 probes_init_time = time.time() - probes_init_start
 print(f"    Probes loaded in {probes_init_time:.2f} seconds")
