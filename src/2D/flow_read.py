@@ -38,11 +38,22 @@ izone = 1  # Zone 1 corresponds to O-grid
 idim_o = CGNS.zonedim_read(ifile, ibase, izone)
 isize_o, nx_o, ny_o, nz_o = CGNS.zone_size_read(ifile, ibase, izone, idim_o)
 
+# Maximum number of point to read in coordinates (x, y)
+nx_o_max = 1280
+ny_o_max = 190
+
 # Define index ranges for O-grid (2D structured grid)
 ijk_min_o = [1, 1]
-ijk_max_o = [nx_o, ny_o]
+ijk_max_o = [nx_o_max, ny_o_max]
 
+# Load O-grid coordinates (X and Y coordinates)
+xo = CGNS.read_2d_coord("CoordinateX", ifile, ibase, izone, ijk_min_o, ijk_max_o, nx_o_max, ny_o_max)
+yo = CGNS.read_2d_coord("CoordinateY", ifile, ibase, izone, ijk_min_o, ijk_max_o, nx_o_max, ny_o_max)
 print(f"    O-grid dimensions: {nx_o} x {ny_o}")
+
+# Save mesh coordinates to Python-readable format (.npz files)
+mean_file_python = mean_path_python + 'o_grid.npz'
+np.savez(mean_file_python, x=xo, y=yo)
 
 grid_setup_time = time.time() - grid_setup_start
 print(f"Grid loading completed in {grid_setup_time:.2f} seconds")
@@ -67,10 +78,10 @@ print("Initializing flow field arrays...")
 arrays_init_start = time.time()
 
 # Initialize save arrays for O-grid flow properties
-density_o = np.zeros((nx_o, ny_o, nqout))        # Density accumulator
-pressure_o = np.zeros((nx_o, ny_o, nqout))       # Pressure accumulator
-momentumx_o = np.zeros((nx_o, ny_o, nqout))      # X-momentum accumulator
-momentumy_o = np.zeros((nx_o, ny_o, nqout))      # Y-momentum accumulator
+density_o = np.zeros((nx_o_max, ny_o_max, nqout))        # Density accumulator
+pressure_o = np.zeros((nx_o_max, ny_o_max, nqout))       # Pressure accumulator
+momentumx_o = np.zeros((nx_o_max, ny_o_max, nqout))      # X-momentum accumulator
+momentumy_o = np.zeros((nx_o_max, ny_o_max, nqout))      # Y-momentum accumulator
 
 # Initialize save array for simulation time
 times = np.zeros((nqout))
@@ -114,14 +125,14 @@ with tqdm(total=nqout, desc="Processing qouts") as pbar:
         times[nq] = CGNS.descriptors_read(ifile)
 
         # Read and save density field
-        density_o[:,:,nq] = CGNS.read_2d_flow('Density', ifile, ibase, izone, ijk_min_o, ijk_max_o, nx_o, ny_o)
+        density_o[:,:,nq] = CGNS.read_2d_flow('Density', ifile, ibase, izone, ijk_min_o, ijk_max_o, nx_o_max, ny_o_max)
 
         # Read and accumulate pressure field
-        pressure_o[:,:,nq] = CGNS.read_2d_flow('Pressure', ifile, ibase, izone, ijk_min_o, ijk_max_o, nx_o, ny_o)
+        pressure_o[:,:,nq] = CGNS.read_2d_flow('Pressure', ifile, ibase, izone, ijk_min_o, ijk_max_o, nx_o_max, ny_o_max)
 
         # Read and accumulate momentum components
-        momentumx_o[:,:,nq] = CGNS.read_2d_flow('MomentumX', ifile, ibase, izone, ijk_min_o, ijk_max_o, nx_o, ny_o)
-        momentumy_o[:,:,nq] = CGNS.read_2d_flow('MomentumY', ifile, ibase, izone, ijk_min_o, ijk_max_o, nx_o, ny_o)
+        momentumx_o[:,:,nq] = CGNS.read_2d_flow('MomentumX', ifile, ibase, izone, ijk_min_o, ijk_max_o, nx_o_max, ny_o_max)
+        momentumy_o[:,:,nq] = CGNS.read_2d_flow('MomentumY', ifile, ibase, izone, ijk_min_o, ijk_max_o, nx_o_max, ny_o_max)
 
         # Close current CGNS file
         CGNS.close_file(ifile)
