@@ -82,12 +82,12 @@ CGNS.create_file_cgns(mean_file_CGNS, '2D')
 CGNS.write_2d_coord(mean_file_CGNS, 1, nx_o, ny_o, xo, yo)  # O-grid coordinates
 CGNS.write_2d_coord(mean_file_CGNS, 2, nx_h, ny_h, xh, yh)  # H-grid coordinates
 
-# Save mesh coordinates to Python-readable format (.npz files)
-mean_file_python = mean_path_python + 'o_grid.npz'
-np.savez(mean_file_python, x=xo, y=yo)
+# # Save mesh coordinates to Python-readable format (.npz files)
+# mean_file_python = mean_path_python + 'o_grid.npz'
+# np.savez(mean_file_python, x=xo, y=yo)
 
-mean_file_python = mean_path_python + 'h_grid.npz'
-np.savez(mean_file_python, x=xh, y=yh)
+# mean_file_python = mean_path_python + 'h_grid.npz'
+# np.savez(mean_file_python, x=xh, y=yh)
 
 output_setup_time = time.time() - output_setup_start
 print(f"Output files created in {output_setup_time:.2f} seconds")
