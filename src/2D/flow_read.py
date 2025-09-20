@@ -186,9 +186,9 @@ file_python = flow_path_python + 'pressure_o.npy'
 np.save(file_python, pressure_o)
 
 # Save momentum fields
-file_python = flow_path_python + 'momentumx_o.npy'
+file_python = flow_path_python + 'momentum_x_o.npy'
 np.save(file_python, momentumx_o)
-file_python = flow_path_python + 'momentumy_o.npy'
+file_python = flow_path_python + 'momentum_y_o.npy'
 np.save(file_python, momentumy_o)
 
 numpy_write_time = time.time() - numpy_write_start
