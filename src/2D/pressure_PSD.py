@@ -82,7 +82,8 @@ P_mean_probes = np.zeros((nqout, num_probes))
 P_probes[:,0] = P[312,0,:]
 P_probes[:,1] = P[359,0,:]
 P_probes[:,2] = P[387,0,:]
-P_probes[:,3] = P[416,199,:]
+# P_probes[:,3] = P[416,199,:]
+P_probes[:,3] = P[416,189,:]
 
 probes_init_time = time.time() - probes_init_start
 print(f"    Probes loaded in {probes_init_time:.2f} seconds")
