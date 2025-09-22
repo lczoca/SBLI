@@ -75,9 +75,6 @@ num_probes = 4
 # Initialize pressure probes array
 P_probes = np.zeros((nqout, num_probes))
 
-P_mean_probes = np.zeros((nqout, num_probes))
-
-
 # Load pressure probes in points in the suction side
 P_probes[:,0] = P[312,0,:]
 P_probes[:,1] = P[359,0,:]
