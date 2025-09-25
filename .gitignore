@@ -251,7 +251,8 @@ coverage.xml
 .hypothesis/
 
 # Test (temporary) files
-temp.*
+temp*.*
+test*.*
 
 # ------------------------------------------------------------------------------
 # Documentation Build Files
