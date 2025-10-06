@@ -2,7 +2,7 @@ import numpy as np
 
 from filepath import *
 from flow_properties import *
-from flow_auxiliary import *
+from compact_scheme_10th import *
 
 # ====================================================================================================
 # CFD DATA READING AND PROCESSING SCRIPT
