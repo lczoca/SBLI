@@ -1,6 +1,6 @@
 import numpy as np
 
-def compact_scheme_10th(h,vec):
+def compact_scheme_10th(vec,h):
 
   n = vec.shape[0] # Number of snapshots or number of points
 
