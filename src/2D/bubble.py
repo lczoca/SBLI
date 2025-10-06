@@ -1,4 +1,3 @@
-from matplotlib import pyplot
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
@@ -16,7 +15,7 @@ def bubble_length(x_grid: np.ndarray, y_grid: np.ndarray,
     Analyzes flow separation bubbles by computing bubble length and separation/reattachment points.
 
     This function identifies regions of flow separation (where skin friction coefficient < 0)
-    and calculates the geometric properties of separation bubbles for mean flow.
+    and calculates the geometric properties of separation bubbles for multiple flow snapshots.
 
     Parameters:
     -----------
@@ -24,8 +23,8 @@ def bubble_length(x_grid: np.ndarray, y_grid: np.ndarray,
         Grid X coordinates
     y_grid : np.ndarray, shape (nx, ny)
         Grid Y coordinates
-    skin_friction_coeff : np.ndarray, shape (n_points)
-        Skin friction coefficient (mean value) (cf < 0 indicates separation)
+    skin_friction_coeff : np.ndarray, shape (n_points, num_snapshots)
+        Skin friction coefficient field (cf < 0 indicates separation)
     analysis_region : np.ndarray or slice
         Indices or slice defining the region to analyze for separation
     invert_separation_order : bool, default=False
@@ -33,12 +32,12 @@ def bubble_length(x_grid: np.ndarray, y_grid: np.ndarray,
 
     Returns:
     --------
-    bubble_length : float
-        Mean length of separation bubble for each snapshot
-    separation_point : float
-        Grid X coordinate of mean flow separation point
-    reattachment_point : float
-        Grid Y coordinate of mean flow reattachment point
+    bubble_length : np.ndarray, shape (num_snapshots)
+        Length of separation bubble for each snapshot
+    separation_point : np.ndarray, shape (num_snapshots)
+        Airfoil flow separation point 
+    reattachment_point : np.ndarray, shape (num_snapshots)
+        Airfoil flow reattachment point
 
     Notes:
     -----
@@ -54,24 +53,21 @@ def bubble_length(x_grid: np.ndarray, y_grid: np.ndarray,
     # Extract analysis region coordinates
     region_x_grid = x_grid[analysis_region, 0]
     region_y_grid = y_grid[analysis_region, 0]
-    region_skin_friction = skin_friction_coeff[analysis_region]
+    region_skin_friction = skin_friction_coeff[analysis_region, :]
 
     # Separation detection
     # Create boolean mask for separated flow regions
     is_separated = region_skin_friction < 0
 
-    # Check if there is any separation
-    has_separation = np.any(is_separated)
-
-    if not has_separation:
-        # No separation found - return zeros
-        return 0.0, 0.0, 0.0
+    # Check which snapshots contain separation
+    has_separation = np.any(is_separated, axis=0)
 
     # Separation boundary identification - find separation boundaries
-    # Find first and last separated points
-    separation_indices = np.where(is_separated)[0]
-    separation_start_idx = separation_indices[0]  # First separated point
-    separation_end_idx = separation_indices[-1]   # Last separated point
+    # For each snapshot with separation, find first and last separated points
+    # First separation point per snapshot
+    separation_start_idx = np.where(has_separation, np.argmax(is_separated, axis=0), 0)
+    # Last separation point per snapshot
+    separation_end_idx = np.where(has_separation, is_separated.shape[0] - 1 - np.argmax(is_separated[::-1,:], axis=0), 0)
 
     # Bubble geometry calculation
     # Extract coordinates at separation boundaries
@@ -83,17 +79,17 @@ def bubble_length(x_grid: np.ndarray, y_grid: np.ndarray,
     # Compute bubble length as Euclidean distance
     delta_x = end_x - start_x
     delta_y = end_y - start_y
-    bubble_length = np.sqrt(delta_x**2 + delta_y**2)
+    bubble_length = np.where(has_separation, np.sqrt(delta_x**2 + delta_y**2), 0.0)
 
     # Separation point assignment - flow direction conventions
     if invert_separation_order:
         # Pressure side convention: separation = downstream, reattachment = upstream
-        separation_point = end_x
-        reattachment_point = start_x
+        separation_point = np.where(has_separation, end_x, 0.0)
+        reattachment_point = np.where(has_separation, start_x, 0.0)
     else:
         # Suction side convention: separation = upstream, reattachment = downstream
-        separation_point = start_x
-        reattachment_point = end_x
+        separation_point = np.where(has_separation, start_x, 0.0)
+        reattachment_point = np.where(has_separation, end_x, 0.0)
 
     return bubble_length, separation_point, reattachment_point
 
@@ -181,8 +177,8 @@ def bubble_area(x_grid: np.ndarray, y_grid: np.ndarray, contour_level: float,
 
         # Generate contour lines at the specified level for current snapshot
         contour_set = ax.contour(x_grid, y_grid,
-                                velocity_field[:, :, snapshot_index],
-                                levels=[contour_level])
+                                 velocity_field[:, :, snapshot_index],
+                                 levels=[contour_level])
 
         # Initialize total area accumulator for current snapshot
         snapshot_bubble_area = 0.0
