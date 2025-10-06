@@ -1,5 +1,6 @@
 import numpy as np
 import sys
+import os
 import time
 
 import CGNS
@@ -36,10 +37,13 @@ skip_step_qout = 5
 
 # Maximum number of point to read in coordinates (x, y)
 nx_max = 1280
-ny_max = 190
+ny_max = 300
 
 # Python/Numpy save path
 save_path = '/media/lczoca/hd_leonardo2/Hugo_Data_Processed/Python_data2/'
+# Create the directory if it does not exist
+if not os.path.exists(save_path):
+    os.makedirs(save_path)
 
 path_setup_time = time.time() - path_setup_start
 print(f"Grid loading completed in {path_setup_time:.2f} seconds")
