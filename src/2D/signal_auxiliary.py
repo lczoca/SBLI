@@ -78,9 +78,8 @@ def welch_parameters(num_bins: int, num_points: int, overlap: float):
 
     # Calculate the size of each segment by dividing the total signal by number of bins
     # This is the direct approach:
-        # total_signal / [number_of_segments - (number_of_segments - 1) * overlap] = size_per_segment
+    #   total_signal / [number_of_segments - (number_of_segments - 1) * overlap] = size_per_segment
     nperseg = int(num_points / (num_bins - ((num_bins - 1) * overlap)))
-    # print('nperseg =', nperseg)
 
     # Check if the number of bins is viable for the signal size
     # If nperseg < 1, it means we have more bins than points, which is impossible
@@ -89,14 +88,34 @@ def welch_parameters(num_bins: int, num_points: int, overlap: float):
 
     # Calculate the number of overlapping points between consecutive segments
     # The overlap is a fraction of the segment size
-    # Example: if nperseg=1000 and overlap=0.5, then noverlap=500
     noverlap = int(nperseg * overlap)
-    # print('overlap =', noverlap)
 
     # For real signals, the FFT has Hermitian symmetry, so only half of the
     # frequencies are unique. The number of frequencies is (nperseg // 2) + 1
     # The +1 includes the DC component (zero frequency)
     psd_size = (nperseg // 2) + 1
+
+    # Calculate the starting index of each segment window
+    segment_start_indices = np.arange(num_bins) * int(nperseg - noverlap)
+
+    # Calculate the ending index of each segment window
+    segment_end_indices = segment_start_indices + int(nperseg)
+
+    # Display formatted table header with diagnostic information
+    print("=" * 73)
+    # Display the key parameters that define the segmentation
+    print(f"Size of each segment         = {nperseg}")
+    print(f"Number of overlapping points = {noverlap}")
+    print("=" * 73)
+    # Computes the starting and ending indices for each segment window in the
+    # Welch method and displays them in a formatted table
+    print("Index  | Initial |   Final |    Size | Overlap")
+    print("-" * 73)
+    for segment_index in range(len(segment_start_indices)):
+        print(f"{segment_index:6d} | {segment_start_indices[segment_index]:7.0f} | "
+              f"{segment_end_indices[segment_index]:7.0f} | {nperseg:7.0f} | "
+              f"{noverlap:7.0f}")
+    print("=" * 73)
 
     # Return all calculated parameters
     # These can be used directly with scipy.signal.welch
