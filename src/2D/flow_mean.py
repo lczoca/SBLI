@@ -8,7 +8,7 @@ from flow_compute import *
 # =========================================================================
 # CFD DATA PROCESSING AND AVERAGING SCRIPT
 # This script processes multiple files to compute time-averaged flow
-# properties for computational grids (O-grid)
+# properties for computational O-grid
 # =========================================================================
 
 print("Starting CFD data processing and averaging...")

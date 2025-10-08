@@ -1,4 +1,3 @@
-# %% Cell 1
 import numpy as np
 import scipy as sp
 import time
@@ -7,12 +6,12 @@ import matplotlib.ticker as ticker
 
 from filepath import *
 from flow_properties import *
-from signal_auxiliary import *
+from flow_signal_auxiliary import *
 
 # =========================================================================
-# CFD DATA PROCESSING SCRIPT -> PRESSURE AND VELOCITY PSD
-# This script compute pressure and velocity (x;y) PSD (power spectral
-# density) over time for a set of probes
+# CFD DATA PROCESSING SCRIPT -> PRESSURE PSD
+# This script compute pressure PSD (power spectral density) over time for a
+# set of probes
 # =========================================================================
 
 print("Starting CFD data reading and processing...")
@@ -20,31 +19,17 @@ script_start_time = time.time()
 
 # =========================================================================
 # PRESSURE LOADING
-# Load flow pressure for further analysis
+# Load flow pressure for further analysis (PSD)
 # =========================================================================
 print("Loading pressure...")
 pressure_setup_start = time.time()
 
 # Load pressure from Python/Numpy file
-pressure_file = flow_path_python + 'pressure_o.npy'
-P = np.load(pressure_file, mmap_mode='r')
+pressure_file = flow_path_python + 'pressure.npy'
+P = np.load(pressure_file)
 
 pressure_setup_time = time.time() - pressure_setup_start
-
-# =========================================================================
-# VELOCITY LOADING
-# Load flow velocity for further analysis
-# =========================================================================
-print("Loading velocity...")
-velocity_setup_start = time.time()
-
-# Load velocity from Python/Numpy file
-velocity_x_file = flow_path_python + 'velocity_x_o.npy'
-velocity_y_file = flow_path_python + 'velocity_y_o.npy'
-U = np.load(velocity_x_file, mmap_mode='r')
-V = np.load(velocity_y_file, mmap_mode='r')
-
-velocity_setup_time = time.time() - velocity_setup_start
+print(f"    Pressure loading completed in {pressure_setup_time:.2f} seconds")
 
 # =========================================================================
 # TIME LOADING AND SETUP
@@ -62,9 +47,9 @@ t *= Ma
 
 # Time step
 dt = t[1] - t[0]
-print('dt =', dt)
 
 time_setup_time = time.time() - time_setup_start
+print(f"    Pressure loading completed in {time_setup_time:.2f} seconds")
 
 # =========================================================================
 # TIME SERIES PROCESSING SETUP
@@ -75,27 +60,30 @@ print("Setting up time series processing...")
 # Calculate number of output files to process
 nqout = int((last_qout - first_qout) / skip_step_qout) + 1
 
+print(f"    Processing {nqout} files from qout {first_qout} to {last_qout} (step: {skip_step_qout})")
+
 # =========================================================================
-# PROBES LOADING
-# Load probes for flow pressure and velocity on suction side
+# PRESSURE PROBES LOADING
+# Load probes for flow pressure on suction side
 # =========================================================================
-print("Loading probes...")
+print("Loading pressure probes...")
 probes_init_start = time.time()
 
-# # Number of probes
-# num_probes = 4
+# Number of probes
+num_probes = 4
 
-# # Initialize pressure probes array
-# P_probes = np.zeros((nqout, num_probes))
+# Initialize pressure probes array
+P_probes = np.zeros((nqout, num_probes))
 
 # Load pressure probes in points in the suction side
-P_probes = P[320,49,:]
-
-# Load velocity probes in points in the suction side
-U_probes = U[320,49,:]
-V_probes = V[320,49,:]
+P_probes[:,0] = P[312,0,:]
+P_probes[:,1] = P[359,0,:]
+P_probes[:,2] = P[387,0,:]
+P_probes[:,3] = P[416,199,:]
+# P_probes[:,3] = P[416,189,:]
 
 probes_init_time = time.time() - probes_init_start
+print(f"    Probes loaded in {probes_init_time:.2f} seconds")
 
 # =========================================================================
 # PSD PROCESSING SETUP
@@ -124,33 +112,44 @@ nperseg, noverlap, psd_size = welch_parameters(num_bins=nbins, num_points=nt, ov
 windows = np.hanning(nperseg)
 
 PSD_setup_time = time.time() - PSD_setup_start
+print(f"    PSD setup completed in {PSD_setup_time:.2f} seconds")
 
 # =========================================================================
-# PSD ANALYSIS
-# Spectral analysis with PSD (power spectral density)
+# PRESSURE PSD ARRAYS INITIALIZATION
+# Initialize arrays to save pressure PSD at it probe and the frequencies
+# =========================================================================
+print("Initializing PSD arrays...")
+PSD_probes_init_start = time.time()
+
+# Initialize pressure PSD array
+# P_PSD = np.zeros((nqout, num_probes))
+P_PSD = np.zeros((psd_size, num_probes))
+
+# Initialize frequency array
+# freq = np.zeros((nqout, num_probes))
+freq = np.zeros((psd_size, num_probes))
+
+PSD_probes_init_time = time.time() - PSD_probes_init_start
+print(f"    PSD arrays initialized in {PSD_probes_init_time:.2f} seconds")
+
+# =========================================================================
+# PRESSURE PSD ANALYSIS
+# Spectral analysis of pressure with PSD (power spectral density)
 # =========================================================================
 print("Starting PSD analysis...")
 PSD_analysis_start = time.time()
 
 # Compute pressure PSD and frequency for it probe
-P_freq, P_PSD = sp.signal.welch(P_probes, fs=f, window=windows, nperseg=nperseg, noverlap=noverlap,
-    return_onesided=True, scaling='density', axis=-1, average='mean')
-
-# Compute pressure PSD and frequency for it probe
-U_freq, U_PSD = sp.signal.welch(U_probes, fs=f, window=windows, nperseg=nperseg, noverlap=noverlap,
-    return_onesided=True, scaling='density', axis=-1, average='mean')
-V_freq, V_PSD = sp.signal.welch(V_probes, fs=f, window=windows, nperseg=nperseg, noverlap=noverlap,
-        return_onesided=True, scaling='density', axis=-1, average='mean')
-
+for i in range(num_probes):
+    freq[:,i], P_PSD[:,i] = sp.signal.welch(P_probes[:,i], fs=f, window=windows, nperseg=nperseg, noverlap=noverlap,
+        return_onesided=True, scaling='density', axis=- 1, average='mean')
 
 # Frequency correction for SBLI analysis
-P_freq *= 0.1
-U_freq *= 0.1
-V_freq *= 0.1
+freq *= 0.1
 
 PSD_analysis_time = time.time() - PSD_analysis_start
+print(f"    PSD analysis completed in {PSD_analysis_time:.2f} seconds")
 
-# %% Cell 2
 # =========================================================================
 # PRESSURE PSD PLOT
 # Results plot generate and save
@@ -159,29 +158,30 @@ print("Starting plot generation...")
 Plot_generation_start = time.time()
 
 # =====================================
-# Plot probes signal
+# Plot pressure probes signal
 # =====================================
 
 # Create figure and axis
 fig1, ax = plt.subplots(figsize=(18,6), dpi=300)
 
 # Simple plot
-ax.plot(t, P_probes, label="Presure", color="red", linestyle="-", linewidth=2, marker="", markersize=4)
-ax.plot(t, U_probes, label="Velocity-X", color="green", linestyle="-", linewidth=2, marker="", markersize=4)
-ax.plot(t, V_probes, label="Velocity-Y", color="blue", linestyle="-", linewidth=2, marker="", markersize=4)
+ax.plot(t, P_probes[:,0], label="Probe 1", color="red", linestyle="-", linewidth=2, marker="", markersize=4)
+ax.plot(t, P_probes[:,1], label="Probe 2", color="black", linestyle="-", linewidth=2, marker="", markersize=4)
+ax.plot(t, P_probes[:,2], label="Probe 3", color="blue", linestyle="-", linewidth=2, marker="", markersize=4)
+ax.plot(t, P_probes[:,3], label="Probe 4", color="magenta", linestyle="-", linewidth=2, marker="", markersize=4)
 
 # Titles and labels
-ax.set_title("Signal - point [320,49]", fontsize=18, pad=15, loc="center")
+ax.set_title("Pressure Signal - Suction Side", fontsize=18, pad=15, loc="center")
 ax.set_xlabel("t", fontsize=14, labelpad=10)
-ax.set_ylabel("P, U, V", fontsize=14, labelpad=10)
+ax.set_ylabel("P", fontsize=14, labelpad=10)
 
 # Scales
 ax.set_xscale("linear")
 ax.set_yscale("linear")
 
 # Limits
-# ax.set_xlim(15, 41)
-# ax.set_ylim(0.35, 0.70)
+ax.set_xlim(15, 41)
+ax.set_ylim(0.35, 0.70)
 
 # Major and minor ticks
 ax.tick_params(axis="x", which="major", direction="inout", color='black', length=8, width=1.2, labelsize=12, pad=6, top=True, bottom=True)
@@ -210,23 +210,29 @@ ax.legend(loc="upper right", fontsize=12, frameon=True, shadow=True, fancybox=Tr
 fig1.tight_layout()
 
 # Save figure
-fig1.savefig(fname=figure_path+"PUV_probes.png", dpi=300, format='png', bbox_inches="tight")
+fig1.savefig(fname=figure_path+"pressure_probes_flutuation.png", dpi=300, format='png', bbox_inches="tight")
 
-# %% Cell 3
 # =====================================
-# Plot probes PSD
+# Plot pressure probes signal
 # =====================================
 
 # Create figure and axis
 fig2, ax = plt.subplots(figsize=(12,10), dpi=300)
 
 # Simple plot
-ax.plot(P_freq, P_PSD, label="Presure", color="red", linestyle="-", linewidth=2, marker="", markersize=4)
-ax.plot(U_freq, U_PSD, label="Velocity-X", color="green", linestyle="-", linewidth=2, marker="", markersize=4)
-ax.plot(V_freq, V_PSD, label="Velocity-Y", color="blue", linestyle="-", linewidth=2, marker="", markersize=4)
+ax.plot(freq[:,0], P_PSD[:,0], label="Probe 1", color="red", linestyle="-", linewidth=2, marker="", markersize=4)
+ax.plot(freq[:,1], P_PSD[:,1], label="Probe 2", color="black", linestyle="-", linewidth=2, marker="", markersize=4)
+ax.plot(freq[:,2], P_PSD[:,2], label="Probe 3", color="blue", linestyle="-", linewidth=2, marker="", markersize=4)
+ax.plot(freq[:,3], P_PSD[:,3], label="Probe 4", color="magenta", linestyle="-", linewidth=2, marker="", markersize=4)
+
+ax.axvline(0.058)
+ax.axvline(0.12)
+ax.axvline(0.2)
+ax.axvline(0.4)
+ax.axvline(0.8)
 
 # Titles and labels
-ax.set_title("Signal PSD - point [320,49]", fontsize=18, pad=15, loc="center")
+ax.set_title("Pressure PSD - Suction Side", fontsize=18, pad=15, loc="center")
 ax.set_xlabel(r"$S_t$", fontsize=14, labelpad=10)
 ax.set_ylabel("PSD", fontsize=14, labelpad=10)
 
@@ -265,9 +271,10 @@ ax.legend(loc="upper right", fontsize=12, frameon=True, shadow=True, fancybox=Tr
 fig2.tight_layout()
 
 # Save figure
-fig2.savefig(fname=figure_path+"PUV_PSD.png", dpi=300, format='png', bbox_inches="tight")
+fig2.savefig(fname=figure_path+"pressure_PSD_flutuation.png", dpi=300, format='png', bbox_inches="tight")
 
 Plot_generation_time = time.time() - Plot_generation_start
+print(f"    Plot generation completed in {Plot_generation_time:.2f} seconds")
 
 # =========================================================================
 # EXECUTION SUMMARY
@@ -279,10 +286,10 @@ print("\n" + "="*73)
 print("CFD DATA PROCESSING COMPLETED SUCCESSFULLY")
 print("="*73)
 print(f"Loading pressure data:     {pressure_setup_time:.2f} seconds")
-print(f"Loading velocity data:     {velocity_setup_time:.2f} seconds")
 print(f"Loading time data:         {time_setup_time:.2f} seconds")
 print(f"Loading pressure probes:   {probes_init_time:.2f} seconds")
 print(f"Setup PSD parameters:      {PSD_setup_time:.2f} seconds")
+print(f"PSD initialization:        {PSD_probes_init_time:.2f} seconds")
 print(f"PSD analysis:              {PSD_analysis_time:.2f} seconds")
 print(f"Generate graphics:         {Plot_generation_time:.2f} seconds")
 print("-"*73)

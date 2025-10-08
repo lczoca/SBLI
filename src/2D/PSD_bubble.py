@@ -8,8 +8,8 @@ import matplotlib.ticker as ticker
 
 from filepath import *
 from flow_properties import *
-from signal_auxiliary import *
-from bubble import *
+from flow_signal_auxiliary import *
+from flow_bubble_auxiliary import *
 
 # =========================================================================
 # CFD DATA PROCESSING SCRIPT -> BUBBLE PSD
