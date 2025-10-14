@@ -2,7 +2,6 @@ import numpy as np
 import time
 import sys
 
-from filepath import *
 from flow_properties import *
 from flow_compute import *
 

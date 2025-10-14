@@ -1,6 +1,5 @@
 import numpy as np
 
-from filepath import *
 from flow_properties import *
 from compact_scheme_10th import *
 
