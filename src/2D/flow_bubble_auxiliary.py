@@ -148,7 +148,7 @@ def bubble_area(x_grid: np.ndarray, y_grid: np.ndarray, contour_level: float,
 
     Examples:
     ---------
-    area = bubble_area(x, y, contour_level=-1e-5, velocity_field=u, spatial_analysis_region=slice(300:450))
+    area = bubble_area(x, y, contour_level=-1e-5, velocity_field=u, spatial_analysis_region=slice(300,450))
     area = bubble_area(x, y, contour_level=-1e-5, velocity_field=u, spatial_analysis_region=[300:450])
     """
 
