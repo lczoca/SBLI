@@ -120,3 +120,34 @@ def welch_parameters(num_bins: int, num_points: int, overlap: float):
     # Return all calculated parameters
     # These can be used directly with scipy.signal.welch
     return nperseg, noverlap, psd_size
+
+# =========================================================================
+# =========================================================================
+
+def find_nearest(array: np.ndarray, value: float):
+    """
+    Find the nearest value in an array to a given target value.
+    
+    This function finds the element in the array that has the minimum absolute
+    difference from the specified target value using vectorized NumPy operations.
+    
+    Parameters:
+    -----------
+        array: np.ndarray
+            Input array of numeric values to find the the value.
+        value: float
+            Target value to find the nearest match for.
+    
+    Returns:
+    --------
+        near_value: 
+            The element from the array that is closest to the target value.
+    
+    Examples:
+    ---------
+        near_value = find_nearest(array, value)
+    """
+
+    arr = np.asarray(array)
+    idx = np.abs(arr - value).argmin()
+    return arr[idx]
