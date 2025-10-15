@@ -78,16 +78,16 @@ var = np.load(variable_file, mmap_mode="r")
 variable_setup_time = time.time() - variable_setup_start
 
 # =========================================================================
-# PRESSURE PROBES LOADING
-# Load probes for flow pressure on suction side
+# VARIABLE PROBES LOADING
+# Load probes for flow variable on suction side
 # =========================================================================
-print("Loading pressure probes...")
+print("Loading variable probes...")
 probes_init_start = time.time()
 
-# Initialize pressure probes array
+# Initialize variable probes array
 var_probes = np.zeros((nqout, num_probes))
 
-# Load pressure probes in points in the suction side
+# Load variable probes in points in the suction side
 for i in range(num_probes):
     ix, iy = probe[i]
 
@@ -124,13 +124,13 @@ windows = np.hanning(nperseg)
 PSD_setup_time = time.time() - PSD_setup_start
 
 # =========================================================================
-# PRESSURE PSD ARRAYS INITIALIZATION
-# Initialize arrays to save pressure PSD at it probe and the frequencies
+# VARIABLE PSD ARRAYS INITIALIZATION
+# Initialize arrays to save variable PSD at it probe and the frequencies
 # =========================================================================
 print("Initializing PSD arrays...")
 PSD_probes_init_start = time.time()
 
-# Initialize pressure PSD array
+# Initialize PSD array
 var_PSD = np.zeros((psd_size, num_probes))
 
 # Initialize frequency array
@@ -139,13 +139,13 @@ freq = np.zeros((psd_size, num_probes))
 PSD_probes_init_time = time.time() - PSD_probes_init_start
 
 # =========================================================================
-# PRESSURE PSD ANALYSIS
-# Spectral analysis of pressure with PSD (power spectral density)
+# VARIABLE PSD ANALYSIS
+# Spectral analysis of variable with PSD (power spectral density)
 # =========================================================================
 print("Starting PSD analysis...")
 PSD_analysis_start = time.time()
 
-# Compute pressure PSD and frequency for it probe
+# Compute PSD and frequency for it probe
 for i in range(num_probes):
     freq[:,i], var_PSD[:,i] = sp.signal.welch(var_probes[:,i], fs=f, window=windows, nperseg=nperseg, noverlap=noverlap,
         return_onesided=True, scaling='density', axis=- 1, average='mean')
@@ -156,14 +156,14 @@ freq *= bubble_length
 PSD_analysis_time = time.time() - PSD_analysis_start
 
 # =========================================================================
-# PRESSURE PSD PLOT
+# VARIABLE PSD PLOT
 # Results plot generate and save
 # =========================================================================
 print("Starting plot generation...")
 Plot_generation_start = time.time()
 
 # =====================================
-# Plot pressure probes signal
+# Plot variable probes signal
 # =====================================
 for i in range(num_probes):
     ix, iy = probe[i]
@@ -220,7 +220,7 @@ for i in range(num_probes):
     plt.close()
 
     # =====================================
-    # Plot pressure probes signal
+    # Plot variable probes PSD
     # =====================================
 
     # Create figure and axis
@@ -249,7 +249,6 @@ for i in range(num_probes):
     ax.axvline(0.69)   
 
     # Titles and labels
-    # ax.set_title("Pressure PSD - Suction Side", fontsize=18, pad=15, loc="center")
     ax.set_title("PSD " + variable_plot_title, fontsize=18, pad=15, loc="center")
     ax.set_xlabel(r"$S_t$", fontsize=14, labelpad=10)
     ax.set_ylabel("PSD", fontsize=14, labelpad=10)
